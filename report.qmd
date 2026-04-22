@@ -22,3 +22,18 @@ library(readr)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
+```
+
+## Introduction
+
+This report analyses a weather dataset containing observations such as temperature and rainfall over time.  
+The dataset is stored in the project’s data folder to support reproducible analysis.  
+The objective of this report is to examine trends and variations in weather conditions.  
+Such analysis helps provide insights into environmental patterns and potential climate variability.
+
+
+
+
+
+
+
