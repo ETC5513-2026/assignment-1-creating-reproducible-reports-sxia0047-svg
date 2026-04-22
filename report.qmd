@@ -1,0 +1,24 @@
+---
+title: "ETC5513 Assignment 1"
+author: "Shixu Xiao"
+format:
+  html:
+    theme: cosmo
+    toc: true
+  pdf:
+    documentclass: article
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
