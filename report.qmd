@@ -21,27 +21,110 @@ library(tidyverse)
 library(readr)
 library(ggplot2)
 library(knitr)
-library(kableExtra)
 ```
 
 ## Introduction
 
-This report analyses a weather dataset containing observations such as temperature and rainfall over time.  
-The dataset is stored in the project’s data folder to support reproducible analysis.  
-The objective of this report is to examine trends and variations in weather conditions.  
-Such analysis helps provide insights into environmental patterns and potential climate variability.
+This report analyses a customer-level marketing dataset containing variables such as marketing spend, website visits, and purchase amount.
+The dataset is stored in the project’s data folder to support a reproducible workflow.
+The aim of this report is to examine whether higher marketing spend is associated with higher purchase amounts.
+Understanding this relationship is important for evaluating the effectiveness of the marketing campaign.
 
 ## Research Question
 
-This report investigates how weather conditions vary over time in the dataset.  
-In particular, it examines patterns in temperature and rainfall observations.  
-The analysis aims to identify whether there are noticeable trends or variability in these weather measures.
+This report investigates whether customers who received higher marketing spend tended to make larger purchases.
+It also considers how customer visits relate to purchase outcomes.
+The goal is to identify whether the campaign spending appears to be positively associated with purchase amount.
 
+## Dataset Introduction
 
+```{r}
+#| label: data-cleaning
+#| include: false
 
+data <- read_csv("data/data_35050500_Shixu Xiao.csv")
 
+data <- data |>
+  drop_na()
+```
 
+This dataset contains customer-level marketing campaign data, including variables such as marketing spend, number of visits, and purchase amount.
+The data is stored as a CSV file within the project directory to ensure reproducibility.
+Before analysis, the dataset was cleaned by removing missing values and checking that variables were in appropriate formats.
+Any incomplete observations were excluded to improve data quality.
+The cleaned dataset is used for all subsequent analysis in this report.
 
+## Dataset Description
 
+The dataset contains `r nrow(data)` observations and `r ncol(data)` variables.  
+The dataset includes both character and numeric variables, capturing customer information, campaign activity, and purchase outcomes.  
+Table @tbl-summary presents summary statistics for the numeric variables.  
+Figure @fig-purchase shows the distribution of purchase amounts in the dataset.
 
+```{r}
+#| label: tbl-summary
+#| tbl-cap: "Summary statistics of numeric variables"
 
+data |>
+  summarise(
+    across(
+      where(is.numeric),
+      list(
+        mean = \(x) mean(x, na.rm = TRUE),
+        sd   = \(x) sd(x, na.rm = TRUE)
+      )
+    )
+  ) |>
+  knitr::kable()
+```
+
+```{r}
+#| label: fig-purchase
+#| fig-cap: "Distribution of purchase amount"
+
+ggplot(data, aes(x = purchase_amount)) +
+  geom_histogram(bins = 30) +
+  labs(
+    x = "Purchase amount",
+    y = "Count"
+  )
+```
+
+## Results
+```{r}
+#| label: fig-spend-purchase
+#| fig-cap: "Relationship between marketing spend and purchase amount"
+
+ggplot(data, aes(x = marketing_spend, y = purchase_amount)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(
+    x = "Marketing spend",
+    y = "Purchase amount"
+  )
+```
+
+```{r}
+#| label: fig-segment-purchase
+#| fig-cap: "Average purchase amount by customer segment"
+
+data |>
+  group_by(segment) |>
+  summarise(avg_purchase = mean(purchase_amount, na.rm = TRUE)) |>
+  ggplot(aes(x = segment, y = avg_purchase)) +
+  geom_col() +
+  labs(
+    x = "Customer segment",
+    y = "Average purchase amount"
+  )
+```
+
+Figure @fig-spend-purchase shows the relationship between marketing spend and purchase amount.  
+There is a clear positive trend, indicating that customers who received higher marketing spend tended to make larger purchases.  
+Although there is some variation around the fitted line, the overall pattern suggests a strong positive association.
+
+Figure @fig-segment-purchase provides additional context by comparing average purchase amounts across customer segments.  
+Enterprise customers have the highest average purchase amount, followed by SMB and Consumer segments.  
+This suggests that customer type may also influence purchasing behaviour.
+
+Overall, the results indicate that higher marketing spend is associated with higher purchase amounts, although this relationship should be interpreted as correlational rather than strictly causal.
