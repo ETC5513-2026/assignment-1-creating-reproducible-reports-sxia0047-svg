@@ -31,6 +31,14 @@ The dataset is stored in the project’s data folder to support reproducible ana
 The objective of this report is to examine trends and variations in weather conditions.  
 Such analysis helps provide insights into environmental patterns and potential climate variability.
 
+## Research Question
+
+This report investigates how weather conditions vary over time in the dataset.  
+In particular, it examines patterns in temperature and rainfall observations.  
+The analysis aims to identify whether there are noticeable trends or variability in these weather measures.
+
+
+
 
 
 
